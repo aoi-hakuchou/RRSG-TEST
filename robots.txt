@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/sitemap.xml

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+  
+    <title>Koakuma Project</title>
+    <!-- Basic SEO -->
+    <meta name="description" content="The most comprehensive database of songs that uses the 'Royal Road' progression. You can get a random song that uses the 'Royal Road' chord progressions.">
+    <meta name="keywords" content="Koakuma, little devil, royal road, song randomizer, anime music, japanese chord progression, music tool, j-pop, 王道進行, 小悪魔">
+    <meta name="author" content="aoi-hakuchou">
+  
+    <!-- Mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <!-- Open Graph (for Discord, Facebook, etc.) -->
+    <meta property="og:title" content="Royal Road Song Generator">
+    <meta property="og:description" content="Get a random song that uses the 'Royal Road' progression.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
+    <meta property="og:image" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png">
+  
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Royal Road Song Generator">
+    <meta name="twitter:description" content="Get a random song that uses the 'Royal Road' progression.">
+    <meta name="twitter:image" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png">
+    <link rel="canonical" href="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script>
+      const version = Date.now();
+      document.write(`<link rel="stylesheet" href="styles.css?v=${version}">`);
+      document.write(`<script src="scripts.js?v=${version}" defer><\/script>`);
+    </script>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="web_icon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="web_icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="web_icon/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="web_icon/favicon.ico">
+    <link rel="manifest" href="web_icon/site.webmanifest">
+  
+    <link rel="preconnect" href="https://www.youtube.com">
+    <link rel="preconnect" href="https://i.ytimg.com">
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap" rel="stylesheet">
+    
+    <script src="https://www.youtube.com/iframe_api" defer></script>
+    
+
+  </head> 
+  
+  <body>  
+    <button id="langToggle">日本語</button> 
+    <h1 data-i18n="title">Royal Road Randomizer</h1>
+    <h2 data-i18n="description"></h2>
+    
+    <div class="button-container">
+      <button data-i18n="randomButtonLoading" id="rngVideo" disabled>Please wait for the player to load</button>
+    </div>
+    
+    <div class="video-section">
+
+      <div id="historyPanel"></div>
+
+      <div id="videoContainer">
+        <div id="videoWrapper">
+          <div class="spinner" id="playerSpinner"></div>
+          <div id="videoPlayer"></div>
+        </div>
+        <div id="videoInfo">
+          <h3 id="videoTitle"></h3>
+          <p id="videoNote"></p>
+        </div>
+        <div class="button-container">
+          <button id="autoToggle" data-i18n="autoplayOff">⚪ Autoplay OFF</button>
+        </div>
+      </div>
+
+      <div id="musicPanel">
+
+        <div class="panel-section">
+          <h3 data-i18n="musicZone"></h3>
+          <div class="panel-buttons">
+            <button class="note-btn" data-note="A">A</button>
+            <button class="note-btn" data-note="Bb">B♭</button>
+            <button class="note-btn" data-note="B">B</button>
+            <button class="note-btn" data-note="C">C</button>
+            <button class="note-btn" data-note="Cs">C#</button>
+            <button class="note-btn" data-note="D">D</button>
+            <button class="note-btn" data-note="Eb">E♭</button>
+            <button class="note-btn" data-note="E">E</button>
+            <button class="note-btn" data-note="F">F</button>
+            <button class="note-btn" data-note="Fs">F#</button>
+            <button class="note-btn" data-note="G">G</button>
+            <button class="note-btn" data-note="Gs">G#</button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div class="panel-buttons">
+            <button class="chord-btn" data-chord="M">M</button>
+            <button class="chord-btn" data-chord="m">m</button>
+            <button class="chord-btn" data-chord="m7">m7</button>
+            <button class="chord-btn" data-chord="7">7th</button>
+            <button class="chord-btn" data-chord="M7">M7</button>
+            <button class="chord-btn" data-chord="dim7">dim7</button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div id="musicLog"></div>
+          <div class="log-controls">
+            <button id="stopBtn">Stop</button>
+            <button id="clearLogBtn">Clear</button>
+          </div>
+          <button id="playLogBtn">Play</button>
+          <button id="generateBtn">Generate</button>
+        </div>
+        
+        <div class="panel-section">
+          <h3>BPM:</h3>
+          <div class="bpm-control">
+            <input type="range" id="bpmSlider" min="60" max="180" value="90">
+            <span id="bpmValue">90</span>
+          </div>
+        </div>
+
+        <p data-i18n="musicHelper" id="musicHelper"></p>
+
+      </div>
+
+    </div>
+
+    <div class="info-container">
+      <a id="songLink" data-i18n="songLink" href="https://docs.google.com/spreadsheets/d/1Xgt0j2xQlGcgNxjuAn2DNro8kPWpDbl8G1jYd_6wTIs/edit?pli=1&gid=641022915#gid=641022915">
+        Song List
+      </a>
+      <div class="about-container">
+        <img src="Example%20C.png" id="overlayImage" alt="">
+        <p data-i18n="explanation" id="videoExplanation"></p>
+      </div>
+    </div>
+
+    <div class="footer-container">
+      <h2>Follow / Contact:</h2>
+      
+      <div class="social-links">
+        <p data-i18n="contacts"></p>
+        <!--a href="https://github.com/yourusername" target="_blank">GitHub</a>
+        <a href="https://twitter.com/yourusername" target="_blank">Twitter</a>
+        <a href="mailto:youremail@example.com">Email</a>
+        -->
+      </div>
+
+      <p class="footer-note">
+        © 2026 Koakuma Project
+      </p>
+    </div>
+
+  </body>
+</html>

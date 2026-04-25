@@ -1,0 +1,41 @@
+
+{
+    "en": {
+        "title": "Royal Road Randomizer",
+        "description": "The most comprehensive database of songs that use the 'Royal Road' progression.",
+        "randomButtonLoading": "Please wait for the player to load",
+        "randomButton": "Get a random song",
+
+        "historyTitle": "Listen History",
+        "noHistory": "No history yet",
+        "musicZone": "Music Zone",
+        "musicHelper": "Click the generate button and then click a note above to get the progression in the key of the note (Major)",
+        
+        "videoHelp": "If a video is age-restricted or unavailable, use the link below.",
+        "autoplayOff": "⚪ Autoplay OFF",
+        "autoplayOn": "🟢 Autoplay ON",
+        "songLink": "Google Sheet containing the complete list of songs used for this randomizer.",
+        "explanation": "This is a personal project of mine to compile every song that I come by that uses the Royal Road Progression at least once.\n\nMy goal is to show how prevalent the progression is in pop music (mainly in J-pop).\n\nThe Royal Road Progression, also known as the Koakuma chord progression (小悪魔コード進行) or Oudou Shinkou (王道進行), is a progression consisting of the following chords:\n\nIV - V - iii - vi (Major key)\nOR\nVI - VII - v - i (Minor key)\n\nwhere each of the numerals represents the triad built from the N-th note of the respective key.\n\n\n\n\n\nExample of a C Major key\n(Major chords use capitalized letters)\n\nThere are plenty of variations of the progression, but I'm going to only consider progressions that strictly follow the numerals above.\n\nAdditionally, progressions that have passing chords in between or use inversions of any or all of the chords are also included. Thank you for reading. \n\n** You can think of this like a game of 'Where's Waldo' instead of Waldo listen for the progression :D **",
+        "contacts": "Feel free to direct any complaints to my email: hakuchou132@gmail.com"
+    },
+
+    "ja": {
+        "title": "王道進行ランダマイザー",
+        "description":"「王道進行」を使った曲をまとめたデータベースです。",
+        "randomButtonLoading": "プレイヤーの読み込みをお待ちください",
+        "randomButton": "ランダムな曲を聴く",
+
+        "historyTitle": "再生履歴",
+        "noHistory": "履歴がありません",
+        "musicZone": "ミュージックゾーン",
+        "musicHelper": "生成ボタンをクリックしてから上の音をクリックすると、その音を基準にした（メジャーキーの）コード進行が生成されます。",
+        
+        "videoHelp": "動画が年齢制限または視聴不可の場合は、下のリンクをご利用ください。",
+        "autoplayOff": "⚪ 自動再生 OFF",
+        "autoplayOn": "🟢 自動再生 ON",
+        "songLink": "このランダマイザーで使用されている全曲リストのGoogleスプレッドシート。",
+        "explanation": "これは、王道進行を少なくとも一度使用しているすべての曲をまとめた個人プロジェクトです。\n\nポップミュージック（主にJ-pop）においてこのコード進行がいかに広く使われているかを示すことが目標です。\n\n王道進行は、小悪魔コード進行とも呼ばれ、以下のコードで構成されています：\n\nIV - V - iii - vi（長調）\nまたは\nVI - VII - v - i（短調）\n\n各数字は、それぞれの調の第N音を根音とする三和音を表しています。\n\n\n\n\n\nCメジャーキーの例\n（長調のコードは大文字で表記）\n\nこの進行には様々なバリエーションが存在しますが、上記の数字に厳密に従う進行のみを対象としています。\n\nまた、途中に経過コードが挟まれているものや、一部または全部のコードに転回形が使われているものも含まれます。読んでいただきありがとうございます。\n\n** これは『ウォーリーをさがせ！』のゲームのように考えてください。ウォーリーを探す代わりに、進行に耳を傾けてみてください :D **",
+        "contacts": "不具合や不満があれば、気軽にこちらのメールまでどうぞ：hakuchou132@gmail.com"
+    }
+
+}
