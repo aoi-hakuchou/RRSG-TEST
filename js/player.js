@@ -16,6 +16,15 @@ import {
 const REFILL_THRESHOLD = 2;
 
 export function createPlayer() {
+    
+  console.log(
+    "createPlayer called"
+  );
+
+  console.log(
+    "player container:",
+    document.getElementById("player")
+  );
 
   appState.player =
     new YT.Player("player", {

@@ -2,61 +2,172 @@
 <html lang="en">
 
   <head>
-    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-  
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Koakuma Project</title>
+
     <!-- Basic SEO -->
-    <meta name="description" content="The most comprehensive database of songs that uses the 'Royal Road' progression. You can get a random song that uses the 'Royal Road' chord progressions.">
-    <meta name="keywords" content="Koakuma, little devil, royal road, song randomizer, anime music, japanese chord progression, music tool, j-pop, 王道進行, 小悪魔">
-    <meta name="author" content="aoi-hakuchou">
-  
-    <!-- Open Graph (for Discord, Facebook, etc.) -->
-    <meta property="og:title" content="Royal Road Song Generator">
-    <meta property="og:description" content="Get a random song that uses the 'Royal Road' progression.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
-    <meta property="og:image" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png">
-  
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Royal Road Song Generator">
-    <meta name="twitter:description" content="Get a random song that uses the 'Royal Road' progression.">
-    <meta name="twitter:image" content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png">
-    <link rel="canonical" href="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    
-    <link rel="stylesheet" href="styles.css?v=1">
+    <meta
+      name="description"
+      content="The most comprehensive database of songs that uses the 'Royal Road' progression. You can get a random song that uses the 'Royal Road' chord progressions."
+    >
 
+    <meta
+      name="keywords"
+      content="Koakuma, little devil, royal road, song randomizer, anime music, japanese chord progression, music tool, j-pop, 王道進行, 小悪魔"
+    >
+
+    <meta
+      name="author"
+      content="aoi-hakuchou"
+    >
+
+    <!-- Open Graph -->
+    <meta
+      property="og:title"
+      content="Royal Road Song Generator"
+    >
+
+    <meta
+      property="og:description"
+      content="Get a random song that uses the 'Royal Road' progression."
+    >
+
+    <meta
+      property="og:type"
+      content="website"
+    >
+
+    <meta
+      property="og:url"
+      content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/"
+    >
+
+    <meta
+      property="og:image"
+      content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png"
+    >
+
+    <!-- Twitter -->
+    <meta
+      name="twitter:card"
+      content="summary_large_image"
+    >
+
+    <meta
+      name="twitter:title"
+      content="Royal Road Song Generator"
+    >
+
+    <meta
+      name="twitter:description"
+      content="Get a random song that uses the 'Royal Road' progression."
+    >
+
+    <meta
+      name="twitter:image"
+      content="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/preview.png"
+    >
+
+    <link
+      rel="canonical"
+      href="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/"
+    >
+
+    <!-- Performance -->
+    <link
+      rel="preconnect"
+      href="https://www.youtube.com"
+    >
+
+    <link
+      rel="preconnect"
+      href="https://i.ytimg.com"
+    >
+
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    >
+
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    >
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap"
+      rel="stylesheet"
+    >
+
+    <!-- Icons -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="web_icon/apple-touch-icon.png"
+    >
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="web_icon/favicon-32x32.png"
+    >
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="web_icon/favicon-16x16.png"
+    >
+
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="web_icon/favicon.ico"
+    >
+
+    <link
+      rel="manifest"
+      href="web_icon/site.webmanifest"
+    >
+
+    <!-- Styles -->
+    <link
+      rel="stylesheet"
+      href="styles.css?v=1.0.0"
+    >
+
+    <!-- External Libraries -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"
+    ></script>
+
+    <script
+      src="https://www.youtube.com/iframe_api"
+    ></script>
+
+    <!-- App Bootstrap -->
     <script type="module">
-      const version = Date.now();
-      import(`./js/main.js?v=${version}`);
-    </script>
-    
-    <link rel="apple-touch-icon" sizes="180x180" href="web_icon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="web_icon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="web_icon/favicon-16x16.png">
-    <link rel="icon" type="image/x-icon" href="web_icon/favicon.ico">
-    <link rel="manifest" href="web_icon/site.webmanifest">
-  
-    <link rel="preconnect" href="https://www.youtube.com">
-    <link rel="preconnect" href="https://i.ytimg.com">
-  
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap" rel="stylesheet">
-    
-    <script src="https://www.youtube.com/iframe_api" defer></script>
-    
 
-  </head> 
+      const version = Date.now();
+
+      window.APP_VERSION = version;
+
+      import(
+        `./js/main.js?v=${version}`
+      );
+
+    </script>
+
+  </head>
   
   <body>  
     <button id="langToggle">日本語</button> 

@@ -34,13 +34,20 @@ import {
 } from "./collage.js";
 
 window.onYouTubeIframeAPIReady =
-    () => {
+  () => {
 
-        appState.ytApiReady = true;
+    console.log(
+      "YT callback fired"
+    );
 
-        createPlayer();
-    };
+    console.log(
+      "YT object:",
+      YT
+    );
 
+    createPlayer();
+  };
+  
 async function init() {
     console.log(
         "init called"
