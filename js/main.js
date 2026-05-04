@@ -1,15 +1,4 @@
 // js/main.js
-console.log(
-  "TOP OF MAIN"
-);
-
-window.onYouTubeIframeAPIReady =
-  () => {
-
-    console.log(
-      "YT CALLBACK"
-    );
-  };
 import { appState } from "./state.js";
 
 import { dom } from "./dom.js";
@@ -43,12 +32,6 @@ import {
   buildBgCollage
 } from "./collage.js";
 
-console.log(
-  "AFTER IMPORTS"
-);
-
-
-console.log("MAIN LOADED");
 window.onYouTubeIframeAPIReady =
   () => {
 
