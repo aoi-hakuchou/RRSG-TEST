@@ -33,23 +33,32 @@ import {
   buildBgCollage
 } from "./collage.js";
 
+window.onYouTubeIframeAPIReady =
+    () => {
+
+        appState.ytApiReady = true;
+
+        createPlayer();
+    };
+
 async function init() {
+    console.log(
+        "init called"
+    );
 
-  await initializeTranslations();
+    await initializeTranslations();
 
-  initializeLanguageToggle();
+    initializeLanguageToggle();
 
-  initializeYouTubeAPI();
+    initializeButtons();
 
-  initializeButtons();
+    initializeMusic();
 
-  initializeMusic();
+    initializeHistory();
 
-  initializeHistory();
+    initializeCollage();
 
-  initializeCollage();
-
-  initializeQueue();
+    initializeQueue();
 }
 
 async function initializeTranslations() {
@@ -126,17 +135,6 @@ function initializeCollage() {
 function initializeQueue() {
 
   maintainQueue();
-}
-
-function initializeYouTubeAPI() {
-
-  window.onYouTubeIframeAPIReady =
-    () => {
-
-      appState.ytApiReady = true;
-
-      createPlayer();
-    };
 }
 
 window.addEventListener(
