@@ -4,7 +4,7 @@
   <head>
     
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -15,9 +15,6 @@
     <meta name="description" content="The most comprehensive database of songs that uses the 'Royal Road' progression. You can get a random song that uses the 'Royal Road' chord progressions.">
     <meta name="keywords" content="Koakuma, little devil, royal road, song randomizer, anime music, japanese chord progression, music tool, j-pop, 王道進行, 小悪魔">
     <meta name="author" content="aoi-hakuchou">
-  
-    <!-- Mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <!-- Open Graph (for Discord, Facebook, etc.) -->
     <meta property="og:title" content="Royal Road Song Generator">
@@ -34,10 +31,12 @@
     <link rel="canonical" href="https://aoi-hakuchou.github.io/Royal-Road-Song-Generator/">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <script>
+    
+    <link rel="stylesheet" href="styles.css?v=1">
+
+    <script type="module">
       const version = Date.now();
-      document.write(`<link rel="stylesheet" href="styles.css?v=${version}">`);
-      document.write(`<script src="scripts.js?v=${version}" defer><\/script>`);
+      import(`./js/main.js?v=${version}`);
     </script>
     
     <link rel="apple-touch-icon" sizes="180x180" href="web_icon/apple-touch-icon.png">
