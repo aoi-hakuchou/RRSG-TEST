@@ -32,7 +32,7 @@ import {
 import {
   buildBgCollage
 } from "./collage.js";
-
+console.log("MAIN LOADED");
 window.onYouTubeIframeAPIReady =
   () => {
 
@@ -47,7 +47,7 @@ window.onYouTubeIframeAPIReady =
 
     createPlayer();
   };
-  
+
 async function init() {
     console.log(
         "init called"
