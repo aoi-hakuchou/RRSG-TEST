@@ -92,6 +92,7 @@ document.querySelectorAll(".note-btn").forEach(btn => {
   }
 
   function release() {
+    if (!synth) return;
     synth.triggerRelease(activeNotes);
     activeNotes = [];
   }
