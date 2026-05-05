@@ -1,182 +1,139 @@
-// js/player.js
+/* ------------------- YOUTUBE PLAYER ------------------- */
 
-import { appState } from "./state.js";
-import { dom } from "./dom.js";
+import { translations, currentLang, applyTranslations } from "./translations.js";
+import { saveToHistory } from "./history.js";
+import { videoQueue, maintainQueue, fetchFirstVideo, setVideoNote } from "./api.js";
 
-import {
-  maintainQueue,
-  dequeueVideo,
-  getQueueLength
-} from "./queue.js";
+const rngBtn        = document.getElementById("rngVideo");
+const videoTitle    = document.getElementById("videoTitle");
+const videoNote     = document.getElementById("videoNote");
+const playerSpinner = document.getElementById("playerSpinner");
+const autoToggleBtn = document.getElementById("autoToggle");
 
-import {
-  saveToHistory
-} from "./history.js";
+// Give api.js a reference to videoNote so it can show server errors
+setVideoNote(videoNote);
 
-const REFILL_THRESHOLD = 2;
+let player;
+let playerReady = false;
+let autoMode = false;
 
-export function createPlayer() {
-    
-  console.log(
-    "createPlayer called"
-  );
+// Handles the race condition between the cached YT API script firing
+// onYouTubeIframeAPIReady before this script has fully executed (normal refresh),
+// vs. this script executing first and waiting for the API (hard refresh / first load).
+//
+// Solution: both sides set a flag when they're done. Whichever arrives second
+// calls the actual init function. This way order doesn't matter.
 
-  console.log(
-    "player container:",
-    document.getElementById("player")
-  );
+export let ytApiReady = false;
+export let appScriptReady = false;
 
-  appState.player =
-    new YT.Player("player", {
-
-      height: "360",
-      width: "640",
-
-      playerVars: {
-        autoplay: 1,
-        rel: 0,
-        modestbranding: 1
-      },
-
-      events: {
-        onReady: onPlayerReady,
-        onStateChange: onPlayerStateChange,
-        onError: onPlayerError
-      }
-    });
+export function startPlayerInit() {
+  if (!ytApiReady || !appScriptReady) return;
+  initPlayer();
 }
 
-function onPlayerReady() {
+window.onYouTubeIframeAPIReady = function () {
+  ytApiReady = true;
+  startPlayerInit();
+};
 
-  appState.playerReady = true;
+async function initPlayer() {
+  const existingPlayer = document.getElementById("videoPlayer");
+  if (existingPlayer) existingPlayer.innerHTML = "";
 
-  dom.playerSpinner?.remove();
+  const firstVideo = await fetchFirstVideo();
 
-  playNextVideo();
-}
-
-function onPlayerStateChange(event) {
-
-  if (
-    event.data ===
-    YT.PlayerState.ENDED
-  ) {
-
-    if (appState.autoMode) {
-      playNextVideo();
-    }
-  }
-}
-
-function onPlayerError(event) {
-
-  console.warn(
-    "YouTube Player Error:",
-    event.data
-  );
-
-  playNextVideo();
-}
-
-export function loadVideo(data) {
-
-  if (
-    !appState.player?.loadVideoById
-  ) {
-
-    console.warn(
-      "Player not ready."
-    );
-
-    return false;
-  }
-
-  if (!data?.video) {
-
-    console.warn(
-      "Invalid video data."
-    );
-
-    return false;
-  }
-
-  dom.videoTitle.textContent =
-    data.title || "";
-
-  dom.videoNote.textContent =
-    data.note || "";
-
-  appState.player.loadVideoById(
-    data.video
-  );
-
-  saveToHistory(
-    data.video,
-    data.title
-  );
-
-  return true;
-}
-
-export async function playNextVideo() {
-
-  if (!appState.playerReady) {
+  if (!firstVideo) {
+    videoNote.textContent = "⚠ Failed to load initial video.";
+    playerSpinner.style.display = "none";
+    rngBtn.textContent = "Retry";
+    rngBtn.disabled = false;
+    rngBtn.addEventListener("click", retryInit, { once: true });
     return;
   }
 
-  if (getQueueLength() === 0) {
+  player = new YT.Player("videoPlayer", {
+    height: "630",
+    width: "1120",
+    videoId: firstVideo.video,
+    playerVars: { autoplay: 0, controls: 1, rel: 0 },
+    events: {
+      onReady: () => onPlayerReady(firstVideo),
+      onStateChange: onPlayerStateChange,
+      onError: onPlayerError
+    }
+  });
+}
 
-    await maintainQueue();
+function retryInit() {
+  videoQueue.length = 0;
+  initPlayer();
+}
+
+function onPlayerReady(firstVideo) {
+  playerReady = true;
+  rngBtn.disabled = false;
+  rngBtn.setAttribute("data-i18n", "randomButton");
+  rngBtn.textContent = translations?.[currentLang]?.["randomButton"] || "Get a random song";
+  playerSpinner.style.display = "none";
+  videoTitle.textContent = firstVideo.title || "";
+  videoNote.textContent  = firstVideo.note  || "";
+  saveToHistory(firstVideo.video, firstVideo.title);
+  maintainQueue();
+}
+
+function loadVideo(data) {
+  if (!player || typeof player.loadVideoById !== "function") return;
+  videoTitle.textContent = data.title || "";
+  videoNote.textContent  = data.note  || "";
+  player.loadVideoById(data.video);
+  saveToHistory(data.video, data.title);
+}
+
+function playNextVideo() {
+  if (videoQueue.length === 0) {
+    videoNote.textContent = "⚠ Failed to load video. Please try again.";
+    rngBtn.disabled = false;
+    return;
   }
 
-  const data = dequeueVideo();
+  const data = videoQueue.shift();
 
-  if (!data) {
-
-    dom.videoNote.textContent =
-      "⚠ Failed to load video.";
-
+  if (!data || !data.video) {
+    videoNote.textContent = "⚠ Invalid video data received.";
+    rngBtn.disabled = false;
     return;
   }
 
   loadVideo(data);
-
-  if (
-    getQueueLength() <
-    REFILL_THRESHOLD
-  ) {
-
-    maintainQueue();
-  }
+  maintainQueue();
 }
 
-export function toggleAutoMode() {
+/* ------------------- PLAYER STATE ------------------- */
 
-  appState.autoMode =
-    !appState.autoMode;
-
-  updateAutoButton();
+function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.PLAYING) rngBtn.disabled = false;
+  if (event.data === YT.PlayerState.ENDED && autoMode) playNextVideo();
 }
 
-export function updateAutoButton() {
-
-  if (!dom.autoToggleBtn) {
-    return;
-  }
-
-  dom.autoToggleBtn.textContent =
-    appState.autoMode
-      ? "Autoplay: ON"
-      : "Autoplay: OFF";
+function onPlayerError(event) {
+  console.warn("YouTube error:", event.data);
+  videoNote.textContent = "⚠ Video unavailable. Loading another one.";
+  playNextVideo();
 }
 
-export function retryInit() {
+/* ------------------- AUTOPLAY TOGGLE ------------------- */
 
-  if (
-    appState.playerReady
-  ) {
-    return;
-  }
+autoToggleBtn.addEventListener("click", toggleAutoPlay);
 
-  createPlayer();
+rngBtn.addEventListener("click", () => {
+  if (!playerReady) return;
+  rngBtn.disabled = true;
+  playNextVideo();
+});
+
+function toggleAutoPlay() {
+  autoMode = !autoMode;
+  autoToggleBtn.dataset.i18n = autoMode ? "autoplayOn" : "autoplayOff";
+  applyTranslations(currentLang);
 }

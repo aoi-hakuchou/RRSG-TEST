@@ -1,149 +1,50 @@
-// js/main.js
-import { appState } from "./state.js";
+/* ------------------- MAIN / INIT ------------------- */
+// Single entry point — only this file is loaded via <script type="module">.
+// All other modules are pulled in through imports.
 
-import { dom } from "./dom.js";
-
-import {
-  loadTranslations,
-  applyTranslations,
-  toggleLanguage
-} from "./translations.js";
-
-import {
-  renderHistory
-} from "./history.js";
-
-import {
-  maintainQueue
-} from "./queue.js";
-
-import {
-  createPlayer,
-  playNextVideo,
-  toggleAutoMode,
-  updateAutoButton
-} from "./player.js";
-
-import {
-  initMusic
-} from "./music.js";
-
-import {
-  buildBgCollage
-} from "./collage.js";
-
-window.onYouTubeIframeAPIReady =
-  () => {
-
-    console.log(
-      "YT callback fired"
-    );
-
-    console.log(
-      "YT object:",
-      YT
-    );
-
-    createPlayer();
-  };
+import { loadTranslations, applyTranslations, currentLang, setLang, translations } from "./translations.js";
+import { renderHistory } from "./history.js";
+import { startPlayerInit, appScriptReady, ytApiReady } from "./player.js";
+import "./music-panel.js";
+import "./bg-collage.js";
 
 async function init() {
-    console.log(
-        "init called"
-    );
-
-    await initializeTranslations();
-
-    initializeLanguageToggle();
-
-    initializeButtons();
-
-    initializeMusic();
-
-    initializeHistory();
-
-    initializeCollage();
-
-    initializeQueue();
-}
-
-async function initializeTranslations() {
-
   await loadTranslations();
 
-  const savedLang =
-    localStorage.getItem(
-      "language"
-    );
-
-  if (
-    savedLang &&
-    appState.translations?.[
-      savedLang
-    ]
-  ) {
-
-    appState.currentLang =
-      savedLang;
+  const savedLang = localStorage.getItem("language");
+  if (savedLang && translations[savedLang]) {
+    setLang(savedLang);
   }
 
-  applyTranslations(
-    appState.currentLang
-  );
-}
-
-function initializeLanguageToggle() {
-
-  dom.langToggle
-    ?.addEventListener(
-      "click",
-      toggleLanguage
-    );
-}
-
-function initializeButtons() {
-
-  dom.rngBtn
-    ?.addEventListener(
-      "click",
-      playNextVideo
-    );
-
-  dom.autoToggleBtn
-    ?.addEventListener(
-      "click",
-      () => {
-
-        toggleAutoMode();
-
-        updateAutoButton();
-      }
-    );
-
-  updateAutoButton();
-}
-
-function initializeMusic() {
-
-  initMusic();
-}
-
-function initializeHistory() {
-
+  applyTranslations(currentLang);
   renderHistory();
+
+  const bpmSlider = document.getElementById("bpmSlider");
+  const bpmValue  = document.getElementById("bpmValue");
+
+  if (bpmSlider && bpmValue) {
+    bpmValue.textContent = bpmSlider.value;
+    bpmSlider.addEventListener("input", () => {
+      const bpm = parseInt(bpmSlider.value, 10);
+      bpmValue.textContent = bpm;
+      Tone.Transport.bpm.rampTo(bpm, 0.1);
+    });
+  }
+
+  document.getElementById("langToggle").addEventListener("click", () => {
+    const next = currentLang === "en" ? "ja" : "en";
+    setLang(next);
+    localStorage.setItem("language", next);
+    applyTranslations(next);
+  });
 }
 
-function initializeCollage() {
+document.addEventListener("DOMContentLoaded", async () => {
+  sessionStorage.clear();
 
-  buildBgCollage();
-}
+  await init();
 
-function initializeQueue() {
-
-  maintainQueue();
-}
-
-window.addEventListener(
-  "DOMContentLoaded",
-  init
-);
+  // Signal that the app script is ready, then attempt player init
+  // (the other half of the race condition is window.onYouTubeIframeAPIReady in player.js)
+  startPlayerInit();
+});

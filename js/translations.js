@@ -1,72 +1,52 @@
-// js/translations.js
+/* ------------------- TRANSLATION SYSTEM ------------------- */
 
-import { appState } from "./state.js";
-import { dom } from "./dom.js";
+export let currentLang = "en";
+export let translations;
 
 export async function loadTranslations() {
   try {
-    const res = await fetch("translations.json", {
+    const res = await fetch(`translations.json?t=${Date.now()}`, {
       cache: "no-store"
     });
-
-    if (!res.ok) {
-      throw new Error(
-        `Translation load failed: ${res.status}`
-      );
-    }
-
-    appState.translations = await res.json();
-
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+    translations = await res.json();
   } catch (err) {
-    console.error(
-      "Failed to load translations:",
-      err
-    );
-
-    appState.translations = {
-      en: {},
+    console.error("Translation load error:", err);
+    translations = {
+      en: {
+        randomButtonLoading: "Please wait for the player to load",
+        randomButton: "Get a random song",
+        autoplayOff: "⚪ Autoplay OFF",
+        autoplayOn: "🟢 Autoplay ON"
+      },
       ja: {}
     };
+    currentLang = "en";
   }
 }
 
 export function applyTranslations(lang) {
-  if (!appState.translations) return;
+  document.querySelectorAll("[data-i18n]").forEach(element => {
+    const key = element.dataset.i18n;
+    if (translations?.[lang]?.[key]) {
+      element.textContent = translations[lang][key];
+    }
+  });
 
-  document
-    .querySelectorAll("[data-i18n]")
-    .forEach(element => {
+  document.querySelectorAll("[data-i18n-img]").forEach(img => {
+    const key = img.dataset.i18nImg;
+    if (translations?.[lang]?.[key]) {
+      img.src = translations[lang][key];
+    }
+  });
 
-      const key = element.dataset.i18n;
+  document.getElementById("langToggle").textContent =
+    currentLang === "en" ? "日本語" : "English";
 
-      element.textContent =
-        appState.translations?.[lang]?.[key] ??
-        appState.translations?.en?.[key] ??
-        key;
-    });
-
-  if (dom.langToggle) {
-    dom.langToggle.textContent =
-      lang === "en"
-        ? "日本語"
-        : "English";
-  }
-
+  // Keep the <html> lang attribute in sync for accessibility
   document.documentElement.lang = lang;
-
-  appState.currentLang = lang;
-
-  localStorage.setItem(
-    "language",
-    lang
-  );
 }
 
-export function toggleLanguage() {
-  const nextLang =
-    appState.currentLang === "en"
-      ? "ja"
-      : "en";
-
-  applyTranslations(nextLang);
+export function setLang(lang) {
+  currentLang = lang;
 }
