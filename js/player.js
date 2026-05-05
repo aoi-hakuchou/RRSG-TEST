@@ -24,8 +24,13 @@ let autoMode = false;
 // Solution: both sides set a flag when they're done. Whichever arrives second
 // calls the actual init function. This way order doesn't matter.
 
-export let ytApiReady = false;
-export let appScriptReady = false;
+let ytApiReady = false;
+let appScriptReady = false;
+
+export function setAppScriptReady() {
+  appScriptReady = true;
+  startPlayerInit();
+}
 
 export function startPlayerInit() {
   if (!ytApiReady || !appScriptReady) return;
