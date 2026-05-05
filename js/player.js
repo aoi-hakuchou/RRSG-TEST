@@ -28,16 +28,19 @@ let ytApiReady = false;
 let appScriptReady = false;
 
 export function setAppScriptReady() {
+  console.log("setAppScriptReady called");
   appScriptReady = true;
   startPlayerInit();
 }
 
 export function startPlayerInit() {
+  console.log("startPlayerInit called, ytApiReady:", ytApiReady, "appScriptReady:", appScriptReady);
   if (!ytApiReady || !appScriptReady) return;
   initPlayer();
 }
 
 window.onYouTubeIframeAPIReady = function () {
+  console.log("YT API ready");
   ytApiReady = true;
   startPlayerInit();
 };
