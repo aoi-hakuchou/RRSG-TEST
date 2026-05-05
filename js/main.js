@@ -4,7 +4,7 @@
 
 import { loadTranslations, applyTranslations, currentLang, setLang, translations } from "./translations.js";
 import { renderHistory } from "./history.js";
-import { startPlayerInit, setAppScriptReady, ytApiReady } from "./player.js";
+import { setAppScriptReady } from "./player.js";
 import "./music-panel.js";
 import "./bg-collage.js";
 
