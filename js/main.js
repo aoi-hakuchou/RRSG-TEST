@@ -4,7 +4,7 @@
 
 import { loadTranslations, applyTranslations, currentLang, setLang, translations } from "./translations.js";
 import { renderHistory } from "./history.js";
-import { startPlayerInit, appScriptReady, ytApiReady } from "./player.js";
+import { startPlayerInit, setAppScriptReady, ytApiReady } from "./player.js";
 import "./music-panel.js";
 import "./bg-collage.js";
 
@@ -41,10 +41,6 @@ async function init() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   sessionStorage.clear();
-
   await init();
-
-  // Signal that the app script is ready, then attempt player init
-  // (the other half of the race condition is window.onYouTubeIframeAPIReady in player.js)
-  startPlayerInit();
+  setAppScriptReady();
 });
