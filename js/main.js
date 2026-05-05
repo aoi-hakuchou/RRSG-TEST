@@ -42,5 +42,6 @@ async function init() {
 document.addEventListener("DOMContentLoaded", async () => {
   sessionStorage.clear();
   await init();
+  console.log("calling setAppScriptReady");
   setAppScriptReady();
 });
